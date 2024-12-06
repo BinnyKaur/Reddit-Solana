@@ -1,23 +1,23 @@
 import praw
 import logging
 import csv
+import os 
 
 logging.basicConfig()
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 
-client_id = 'Nu0aZu7KI2XJXZAjoFfZxA'  
-client_secret = 'puyFoHWLcpS9swGPwCD9lT07V259Vw'  
-user_agent = 'MyRedditApp v1.0'  
 
-reddit = praw.Reddit(client_id=client_id,
-                     client_secret=client_secret,
-                     user_agent=user_agent)
+def initialize_reddit(subreddit_name): 
+    client_id = os.environ['client_id']
+    client_secret = os.environ['client_secret']
+    user_agent = 'MyRedditApp v1.0'  
 
-subreddit_name = 'solana'
-subreddit = reddit.subreddit(subreddit_name)
-print(subreddit)
-logger.info("Subreddit value is %s",subreddit)
+    reddit = praw.Reddit(client_id=client_id,client_secret=client_secret,user_agent=user_agent)
+    subreddit = reddit.subreddit(subreddit_name)
+    logger.info("Subreddit value is %s",subreddit)
+
+    return subreddit
 
 
 
@@ -40,15 +40,28 @@ def fetch_subreddit_data(subreddit, limit):
     logging.info(f"Fetched {len(data)} posts from {subreddit}")
     return data
 
-posts = fetch_subreddit_data(subreddit, 10)
-print(posts)
-
-csv_file = "reddit_solanatop.csv"
-with open(csv_file, mode='w', newline='', encoding='utf-8') as file:
-    writer = csv.DictWriter(file, fieldnames=posts[0].keys())
-    writer.writeheader()
-    writer.writerows(posts)
-
-print(f"Data saved to {csv_file}")
 
 
+
+def save_to_csv(data, file_name):
+    if data: 
+        fieldnames = data[0].keys()
+        with open(file_name, mode='w', newline='', encoding='utf-8') as file:
+            writer = csv.DictWriter(file, fieldnames=fieldnames)
+            writer.writeheader()
+            writer.writerows(data)
+        logger.info(f"Data saved to {file_name}")
+    else:
+        logger.warning("No data to save.")
+
+
+def main(): 
+
+    subreddit_name = 'solana'
+    subreddit = initialize_reddit(subreddit_name)
+    posts = fetch_subreddit_data(subreddit, 10)
+    save_to_csv(posts, "reddit_solanatop.csv")
+
+
+if __name__ == main():
+    main()
