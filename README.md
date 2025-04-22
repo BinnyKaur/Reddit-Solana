@@ -32,12 +32,7 @@ This project tracks public sentiment and engagement trends across Reddit posts a
 ---
 
 ## 🧪 Key Metrics & Visuals
-
-- **📅 Sentiment Over Time** – line graph of post sentiment
-- **🔥 Top Upvoted Posts** – bar chart with titles and upvotes
-- **🧠 Comment Sentiment Distribution** – histogram
-- **⚡ Activity Heatmap** – posts by day/hour
-- **💬 Author Leaderboard** – most active users by posts & sentiment
+![image](https://github.com/user-attachments/assets/80d21122-bf25-459d-b873-ab807fd07ad4)
 
 ---
 
